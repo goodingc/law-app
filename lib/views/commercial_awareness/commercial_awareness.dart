@@ -58,14 +58,14 @@ class _CommercialAwarenessViewState extends State<CommercialAwarenessView> with 
                       decoration: InputDecoration(
                         hintText: 'Search',
                       )),
-                  padding: EdgeInsets.only(left: 5, right: 5),
-                  visualDensity: VisualDensity(vertical: -4),
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  visualDensity: const VisualDensity(vertical: -4),
                 ),
               ),
               AnimatedContainer(
                 width: _searching ? 27 : 0,
                 curve: Curves.ease,
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 child: AnimatedOpacity(
                   opacity: _searching ? 1 : 0,
                   duration: Duration(milliseconds: 500),
