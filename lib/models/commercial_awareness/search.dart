@@ -20,7 +20,7 @@ enum CommercialAwarenessSearchCategory {
   firm
 }
 
-extension CommercialAwarenessSearchCategoryExtendsions on CommercialAwarenessSearchCategory {
+extension CommercialAwarenessSearchCategoryExtensions on CommercialAwarenessSearchCategory {
   String get name => describeEnum(this);
 
   String get viewRoute => '/${name.replaceAll(' ', '-')}';
