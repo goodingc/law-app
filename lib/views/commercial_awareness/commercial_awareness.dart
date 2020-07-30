@@ -1,11 +1,12 @@
-import 'package:flutter/foundation.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:law_app/views/commercial_awareness/event.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 
 import '../../models/commercial_awareness/search.dart';
 import '../../providers/commercial_awareness/search.dart';
+import 'event.dart';
 import 'events_feed.dart';
 
 class CommercialAwarenessView extends StatefulWidget {
@@ -14,7 +15,8 @@ class CommercialAwarenessView extends StatefulWidget {
       _CommercialAwarenessViewState();
 }
 
-class _CommercialAwarenessViewState extends State<CommercialAwarenessView> with AutomaticKeepAliveClientMixin<CommercialAwarenessView> {
+class _CommercialAwarenessViewState extends State<CommercialAwarenessView>
+    with AutomaticKeepAliveClientMixin<CommercialAwarenessView> {
   final TextEditingController _controller = TextEditingController();
   bool _searching = false;
   List<CommercialAwarenessSearchResult> _searchResults = [];
@@ -38,10 +40,41 @@ class _CommercialAwarenessViewState extends State<CommercialAwarenessView> with 
     });
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  void _cancelSearch() {
+    _controller.clear();
+    FocusScope.of(context).unfocus();
+  }
+
+  Route _resolveRoute(String name, [Object arguments]) {
+    Widget view;
+    switch (name) {
+      case '/event-feed':
+        view = EventsFeedView();
+        break;
+      case '/event':
+        view = EventView(id: arguments);
+        break;
+      default:
+        view = Center(child: Text(name));
+    }
+    return MaterialPageRoute(
+        builder: (_) => view
+    );
+    return PageRouteBuilder(
+        pageBuilder: (_, __, ___) => view,
+        transitionsBuilder: (BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child) =>
+            SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1, 0),
+                end: Offset.zero,
+              ).animate(animation),
+              child:
+              child, // child is the value returned by pageBuilder
+            )
+    );
   }
 
   @override
@@ -55,7 +88,7 @@ class _CommercialAwarenessViewState extends State<CommercialAwarenessView> with 
                   backgroundColor: Colors.white,
                   label: TextField(
                       controller: _controller,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Search',
                       )),
                   padding: const EdgeInsets.only(left: 5, right: 5),
@@ -68,19 +101,16 @@ class _CommercialAwarenessViewState extends State<CommercialAwarenessView> with 
                 duration: const Duration(milliseconds: 500),
                 child: AnimatedOpacity(
                   opacity: _searching ? 1 : 0,
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.ease,
                   child: IconButton(
                     icon: Icon(
                       Icons.clear,
                       size: 40,
                     ),
-                    padding: EdgeInsets.all(0),
-                    visualDensity: VisualDensity(horizontal: -4),
-                    onPressed: () {
-                      _controller.clear();
-                      FocusScope.of(context).unfocus();
-                    },
+                    padding: const EdgeInsets.all(0),
+                    visualDensity: const VisualDensity(horizontal: -4),
+                    onPressed: _cancelSearch,
                   ),
                 ),
               )
@@ -97,55 +127,65 @@ class _CommercialAwarenessViewState extends State<CommercialAwarenessView> with 
                 child: Navigator(
                   key: _navigator,
                   initialRoute: '/event-feed',
+                  onGenerateInitialRoutes: (state, initialRoute) {
+                    return [_resolveRoute(initialRoute)];
+                  },
                   onGenerateRoute: (settings) {
-                    Widget view;
-                    switch (settings.name) {
-                      case '/event-feed':
-                        view = EventsFeedView();
-                        break;
-                      case '/event':
-                        view = EventView(id: settings.arguments);
-                        break;
-                      default:
-                        view = Center(child: Text(settings.name));
-                    }
-                    return MaterialPageRoute(builder: (_) => view);
+                    return _resolveRoute(settings.name, settings.arguments);
                   },
                 )),
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) =>
                   AnimatedContainer(
-                color: Colors.white,
+//                color: Color.fromRGBO(255, 255, 255, 0.5),
                 height: _searching ? constraints.maxHeight : 0,
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 curve: Curves.ease,
-                child: ListView(
-                  children: [
-                    for (var result in _searchResults)
-                      Card(
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              Expanded(
-                                  child: Text(
-                                result.title,
-                                style: Theme.of(context).textTheme.headline5,
-                              )),
-                              Chip(
-                                label: Text(
-                                  describeEnum(result.category).titleCase,
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                              )
-                            ],
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: ListView(
+                    children: [
+                      for (var result in _searchResults)
+                        Card(
+                          child: InkWell(
+                            onTap: () {
+                              _navigator.currentState.pushNamed(
+                                  result.category.viewRoute,
+                                  arguments: result.id);
+                              _cancelSearch();
+                            },
+                            child: ListTile(
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                      child: Text(
+                                    result.title,
+                                    style: Theme.of(context).textTheme.headline5,
+                                  )),
+                                  Chip(
+                                    label: Text(
+                                      result.category.name.titleCase,
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                  ],
+                        )
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

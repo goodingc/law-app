@@ -6,7 +6,6 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../providers/commercial_awareness/events.dart';
 
 class EventsFeedView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Consumer<CommercialAwarenessEventsProvider>(
@@ -14,68 +13,72 @@ class EventsFeedView extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             for (var eventBrief in eventsProvider.eventBriefs)
-              Card(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/event', arguments: eventBrief.id);
-                  },
-                  child: Column(
-                    children: <Widget>[
-                      Image.network(
-                        eventBrief.imageUrl,
-                        fit: BoxFit.fitWidth,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 4),
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                        child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(eventBrief.title,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6),
-                                    )),
-                                    Text(timeago.format(eventBrief.timestamp),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1)
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  for (var i = 0; i < 3; i++)
-                                    Padding(
-                                        padding: EdgeInsets.only(right: 4),
-                                        child: Chip(
-                                          label: Text(
-                                            'Test Tag',
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Card(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed('/event', arguments: eventBrief.id);
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Image.network(
+                          eventBrief.imageUrl,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 4),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(eventBrief.title,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .caption,
-                                          ),
-                                          padding: EdgeInsets.all(0),
-                                          visualDensity: VisualDensity(
-                                              horizontal: -4, vertical: -4),
-                                        ))
-                                ],
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  eventBrief.caption,
-                                  style: Theme.of(context).textTheme.bodyText2,
+                                                .headline6),
+                                      )),
+                                      Text(timeago.format(eventBrief.timestamp),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1)
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
-                          )),
-                    ],
+                                Row(
+                                  children: <Widget>[
+                                    for (var i = 0; i < 3; i++)
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 4),
+                                          child: Chip(
+                                            label: Text(
+                                              'Test Tag',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption,
+                                            ),
+                                            padding: EdgeInsets.all(0),
+                                            visualDensity: VisualDensity(
+                                                horizontal: -4, vertical: -4),
+                                          ))
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    eventBrief.caption,
+                                    style: Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ],
+                    ),
                   ),
                 ),
               )

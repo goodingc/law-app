@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'commercial_awareness.dart';
 
@@ -18,4 +18,10 @@ class CommercialAwarenessSearchResult extends CommercialAwarenessEntity {
 enum CommercialAwarenessSearchCategory {
   event,
   firm
+}
+
+extension CommercialAwarenessSearchCategoryExtendsions on CommercialAwarenessSearchCategory {
+  String get name => describeEnum(this);
+
+  String get viewRoute => '/${name.replaceAll(' ', '-')}';
 }

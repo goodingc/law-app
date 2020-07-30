@@ -1,8 +1,4 @@
-import 'package:flutter/cupertino.dart';
-
-enum CommercialAwarenessEntityCategory {
-  event
-}
+import 'package:flutter/foundation.dart';
 
 abstract class CommercialAwarenessEntity {
   final int id;

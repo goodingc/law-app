@@ -37,11 +37,7 @@ class CommercialAwarenessEventsProvider extends ChangeNotifier {
             caption: 'Lorem ipsum dolor sit amet, consectetur adipiscing '
                 'elit. Sed pharetra tortor metus, pharetra dignissim '
                 'ligula aliquam vel. Sed at imperdiet dui, sed '
-                'dapibus eros. Maecenas et quam in velit mollis '
-                'mattis. Quisque accumsan ante et lacus accumsan '
-                'dignissim. Duis malesuada nibh in convallis '
-                'consectetur. Aenean porta dapibus suscipit. '
-                'Aliquam luctus sollicitudin pretium.',
+                'dapibus eros.',
             imageUrl:
                 'https://via.placeholder.com/400x200?text=image for event $i'),
     ];
