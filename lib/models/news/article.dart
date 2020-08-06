@@ -1,56 +1,57 @@
-import 'package:flutter/material.dart';
-import 'package:law_app/models/commercial_awareness/event.dart';
+import 'package:flutter/foundation.dart';
 
-import '../comms.dart';
-import '../../models/commercial_awareness/event_brief.dart';
+class NewsArticleSearchResult {
+  final int id;
+  final String title;
 
-class CommercialAwarenessEventsProvider extends ChangeNotifier {
-  CommsProvider comms;
-
-  List<CommercialAwarenessEventBrief> eventBriefs = [];
-
-  CommercialAwarenessEventsProvider() {
-    cloneBriefs();
-  }
-
-  CommercialAwarenessEvent getEvent(int id) {
-    return CommercialAwarenessEvent(
-        id: id,
-        title: 'Commercial Awareness Event $id',
-        timestamp: DateTime.now().subtract(Duration(days: id)),
-        caption: 'Lorem ipsum dolor sit amet, consectetur adipiscing '
-            'elit. Sed pharetra tortor metus, pharetra dignissim '
-            'ligula aliquam vel. Sed at imperdiet dui, sed '
-            'dapibus eros.',
-        imageUrl:
-            'https://via.placeholder.com/400x200?text=image for event $id',
-        content: _markdownData);
-  }
-
-  void cloneBriefs() async {
-    eventBriefs = [
-      for (int i = 0; i < 10; i++)
-        CommercialAwarenessEventBrief(
-            id: i,
-            title: 'Commercial Awareness Event $i',
-            timestamp: DateTime.now().subtract(Duration(days: i)),
-            caption: 'Lorem ipsum dolor sit amet, consectetur adipiscing '
-                'elit. Sed pharetra tortor metus, pharetra dignissim '
-                'ligula aliquam vel. Sed at imperdiet dui, sed '
-                'dapibus eros.',
-            imageUrl:
-                'https://placekitten.com/400/200'),
-    ];
-    notifyListeners();
-  }
-
-  void pullBriefs() async {
-    eventBriefs = eventBriefs.reversed.toList();
-    notifyListeners();
-  }
+  NewsArticleSearchResult({
+    @required this.id,
+    @required this.title,
+  });
 }
 
-const String _markdownData = """
+class NewsArticleBrief extends NewsArticleSearchResult {
+  final DateTime timestamp;
+  final String imageUrl;
+  final String caption;
+
+  NewsArticleBrief({
+    @required id,
+    @required title,
+    @required this.timestamp,
+    this.imageUrl,
+    this.caption,
+  }) : super(id: id, title: title);
+}
+
+class NewsArticle extends NewsArticleBrief {
+  final String content;
+
+  NewsArticle(
+      {@required id,
+      @required title,
+      @required timestamp,
+      imageUrl,
+      caption,
+      @required this.content})
+      : super(
+            id: id,
+            title: title,
+            timestamp: timestamp,
+            imageUrl: imageUrl,
+            caption: caption);
+}
+
+NewsArticle generateArticle(int id) => NewsArticle(
+    id: id,
+    title: 'News Article $id',
+    timestamp: DateTime.now().subtract(Duration(days: id)),
+    imageUrl: 'https://picsum.photos/640/360',
+    caption: 'Lorem ipsum dolor sit amet, consectetur adipiscing '
+        'elit. Sed pharetra tortor metus, pharetra dignissim '
+        'ligula aliquam vel. Sed at imperdiet dui, sed '
+        'dapibus eros.',
+    content: '''
 # Markdown Example
 Markdown allows you to easily include formatted text, images, and even formatted Dart code in your app.
 
@@ -163,4 +164,4 @@ line 2
   
   
 line 3
-""";
+''');

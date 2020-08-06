@@ -1,10 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:recase/recase.dart';
-
-import '../../models/commercial_awareness/search.dart';
-import 'commercial_awareness.dart';
+import 'package:law_app/models/news/article.dart';
+import 'package:law_app/views/news/news.dart';
 
 class FrostTransition extends AnimatedWidget {
   final Widget child;
@@ -22,7 +20,7 @@ class FrostTransition extends AnimatedWidget {
       );
 }
 
-class OverlayMenuPage extends PopupRoute<Null> {
+class SearchView extends PopupRoute<Null> {
   @override
   Color get barrierColor => null;
 
@@ -37,44 +35,45 @@ class OverlayMenuPage extends PopupRoute<Null> {
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation, Widget child) =>
-      FrostTransition(
+      Animation<double> secondaryAnimation, Widget child) {
+    final curveTween = CurveTween(curve: Curves.ease);
+    return FrostTransition(
         animation: Tween<double>(
           begin: 0,
           end: 10,
-        ).animate(animation),
-        child: child,
-      );
+        ).chain(curveTween).animate(animation),
+        child: Align(
+          alignment: AlignmentDirectional.topCenter,
+          child: SizeTransition(
+            axisAlignment: -1,
+            sizeFactor: Tween<double>(
+              begin: 0,
+              end: 1,
+            ).chain(curveTween).animate(animation),
+            child: child,
+          ),
+        ));
+  }
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) =>
       ListView(
         children: [
-          for (var result in context
-              .findAncestorStateOfType<CommercialAwarenessViewState>()
-              .searchResults)
+          for (var result in List<NewsArticleSearchResult>.generate(
+              2, (id) => generateArticle(id)))
             Card(
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(result.category.viewRoute, arguments: result.id);
+                  context.findAncestorStateOfType<NewsViewState>().cancelSearch();
+                  Navigator.of(context)
+                      .pushNamed('/article', arguments: result.id);
                 },
                 child: ListTile(
-                  title: Row(
-                    children: [
-                      Expanded(
-                          child: Text(
-                        result.title,
-                        style: Theme.of(context).textTheme.headline5,
-                      )),
-                      Chip(
-                        label: Text(
-                          result.category.name.titleCase,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                      )
-                    ],
-                  ),
+                  title: Text(
+                    result.title,
+                    style: Theme.of(context).textTheme.headline5,
+                  )
                 ),
               ),
             )

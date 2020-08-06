@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:law_app/views/news/news.dart';
+import 'package:law_app/views/the_city/the_city.dart';
 
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,8 @@ void main() {
       Provider<CommsProvider>(
         create: (_) => CommsProvider(),
       ),
-      ChangeNotifierProxyProvider<CommsProvider, CommercialAwarenessEventsProvider>(
+      ChangeNotifierProxyProvider<CommsProvider,
+          CommercialAwarenessEventsProvider>(
         create: (_) => CommercialAwarenessEventsProvider(),
         update: (_, comms, events) => events..comms = comms,
       ),
@@ -31,12 +34,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = ColorScheme.fromSwatch(primarySwatch: Colors.amber);
     return MaterialApp(
         title: _title,
         home: MainNavigator(),
         theme: Theme.of(context).copyWith(
-          primaryColor: Colors.amber[800],
-          accentColor: Colors.amberAccent,
+            colorScheme: colorScheme,
+          primaryColor: colorScheme.primary,
+          accentColor: colorScheme.primaryVariant
         ));
   }
 }
@@ -65,10 +70,9 @@ class _MainNavigatorState extends State<MainNavigator> {
   );
 
   static final List<MainNavLocation> _navLocations = [
-    MainNavLocation('Commercial Awareness', Icons.info,
-        view: CommercialAwarenessView()),
-    MainNavLocation('Application Writing', Icons.create),
-    MainNavLocation('Interview Prep', Icons.person)
+    MainNavLocation('News', Icons.description, view: NewsView()),
+    MainNavLocation('The City', Icons.business, view: TheCityView()),
+//    MainNavLocation('Interview Prep', Icons.person)
   ];
 
   _MainNavigatorState() {
@@ -97,8 +101,8 @@ class _MainNavigatorState extends State<MainNavigator> {
                 icon: Icon(location.navIcon), title: Text(location.title))
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Theme.of(context).accentColor,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.secondary,
         onTap: (int index) async {
           setState(() {
             _selectedIndex = index;

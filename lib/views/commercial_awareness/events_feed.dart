@@ -1,13 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../providers/commercial_awareness/events.dart';
+import 'commercial_awareness.dart';
 
 class EventsFeedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final searching  = context.findRootAncestorStateOfType<CommercialAwarenessViewState>().searching;
     return Consumer<CommercialAwarenessEventsProvider>(
       builder: (context, eventsProvider, _) => RefreshIndicator(
         child: ListView(
@@ -23,10 +27,20 @@ class EventsFeedView extends StatelessWidget {
                     },
                     child: Column(
                       children: <Widget>[
-                        Image.network(
-                          eventBrief.imageUrl,
-                          fit: BoxFit.fitWidth,
-                        ),
+                        ColorFiltered(
+                            colorFilter: searching ? ColorFilter.mode(
+                              Colors.grey,
+                              BlendMode.saturation,
+                            ): ColorFilter.mode(
+                    Colors.transparent,
+                    BlendMode.multiply,
+                  ) ,
+                          child: Image.network(
+                            eventBrief.imageUrl,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        )
+                    ,
                         Padding(
                             padding: EdgeInsets.all(16),
                             child: Column(

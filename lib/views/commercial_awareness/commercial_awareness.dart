@@ -18,7 +18,7 @@ class CommercialAwarenessView extends StatefulWidget {
 class CommercialAwarenessViewState extends State<CommercialAwarenessView>
     with AutomaticKeepAliveClientMixin<CommercialAwarenessView> {
   final TextEditingController _controller = TextEditingController();
-  bool _searching = false;
+  bool searching = false;
   List<CommercialAwarenessSearchResult> searchResults = [];
   final GlobalKey<NavigatorState> _navigator = GlobalKey<NavigatorState>();
 
@@ -42,7 +42,7 @@ class CommercialAwarenessViewState extends State<CommercialAwarenessView>
     FocusScope.of(context).unfocus();
     _navigator.currentState.pop();
     setState(() {
-      _searching = false;
+      searching = false;
     });
   }
 
@@ -59,17 +59,6 @@ class CommercialAwarenessViewState extends State<CommercialAwarenessView>
         view = Center(child: Text(name));
     }
     return MaterialPageRoute(builder: (_) => view);
-    return PageRouteBuilder(
-        pageBuilder: (_, __, ___) => view,
-        transitionsBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation, Widget child) =>
-            SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1, 0),
-                end: Offset.zero,
-              ).animate(animation),
-              child: child, // child is the value returned by pageBuilder
-            ));
   }
 
   @override
@@ -83,12 +72,12 @@ class CommercialAwarenessViewState extends State<CommercialAwarenessView>
                   AnimatedContainer(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
-                    width: _searching ? constraints.maxWidth - 40 : 40,
+                    width: searching ? constraints.maxWidth - 40 : 40,
                     child: GestureDetector(
                       onTap: () {
                         _navigator.currentState.push(OverlayMenuPage());
                         setState(() {
-                          _searching = true;
+                          searching = true;
                         });
                       },
                       child: Chip(
@@ -115,16 +104,16 @@ class CommercialAwarenessViewState extends State<CommercialAwarenessView>
                   AnimatedContainer(
                       duration: Duration(milliseconds: 500),
                       curve: Curves.ease,
-                      width: _searching ? 0 : constraints.maxWidth - 80,
+                      width: searching ? 0 : constraints.maxWidth - 80,
                       child: Center(
                           child: Text(
-                        'Commercial Awareness',
+                        'News',
                         overflow: TextOverflow.fade,
                       ))),
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.ease,
-                    opacity: _searching ? 1 : 0,
+                    opacity: searching ? 1 : 0,
                     child: IconButton(
                       icon: Icon(
                         Icons.clear,
