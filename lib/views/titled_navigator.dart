@@ -35,6 +35,7 @@ class TitledNavigatorState extends State<TitledNavigator> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
             title: widget.buildTitle(context, title)),

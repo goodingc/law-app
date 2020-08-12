@@ -15,6 +15,7 @@ class _NewsFeedViewState extends State<NewsFeedView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       floatingActionButton: Padding(
           padding: const EdgeInsets.only(left: 30.0),
