@@ -6,12 +6,12 @@ class TheCityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SearchFrame(
-      title: 'The City',
+      initialTitle: 'The City',
       routeViewBuilders: {
         '/': (_, __) => TheCityHomeView(),
       },
-      searchDelegate: (_) {},
-      buildResult: (_, __) {},
+      searchDelegate: (_) => [],
+      buildResult: (_, __) => Container(),
     );
   }
 }

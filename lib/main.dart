@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:law_app/views/news/news.dart';
-import 'package:law_app/views/the_city/the_city.dart';
-
 import 'package:provider/provider.dart';
 
 import 'providers/comms.dart';
-import 'providers/commercial_awareness/events.dart';
-import 'providers/commercial_awareness/search.dart';
-import 'views/commercial_awareness/commercial_awareness.dart';
+import 'views/menu/menu.dart';
+import 'views/news/news.dart';
+import 'views/the_city/the_city.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -15,15 +12,6 @@ void main() {
       Provider<CommsProvider>(
         create: (_) => CommsProvider(),
       ),
-      ChangeNotifierProxyProvider<CommsProvider,
-          CommercialAwarenessEventsProvider>(
-        create: (_) => CommercialAwarenessEventsProvider(),
-        update: (_, comms, events) => events..comms = comms,
-      ),
-      ProxyProvider<CommsProvider, CommercialAwarenessSearchProvider>(
-        create: (_) => CommercialAwarenessSearchProvider(),
-        update: (_, comms, search) => search..comms = comms,
-      )
     ],
     child: App(),
   ));
@@ -72,7 +60,7 @@ class _MainNavigatorState extends State<MainNavigator> {
   static final List<MainNavLocation> _navLocations = [
     MainNavLocation('News', Icons.description, view: NewsView()),
     MainNavLocation('The City', Icons.business, view: TheCityView()),
-//    MainNavLocation('Interview Prep', Icons.person)
+    MainNavLocation('Menu', Icons.menu, view: MenuView())
   ];
 
   _MainNavigatorState() {

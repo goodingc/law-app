@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../models/news/article.dart';
+import '../titled_navigator.dart';
 
 class NewsFeedView extends StatefulWidget {
   @override
@@ -23,10 +24,8 @@ class _NewsFeedViewState extends State<NewsFeedView> {
                 onPressed: () {
                   _scaffoldKey.currentState.openDrawer();
                 },
-                child: Icon(
-                  Icons.menu,
-                  color: Theme.of(context).colorScheme.surface
-                ),
+                child: Icon(Icons.menu,
+                    color: Theme.of(context).colorScheme.surface),
               ),
             ],
           )),
@@ -47,25 +46,14 @@ class _NewsFeedViewState extends State<NewsFeedView> {
               clipBehavior: Clip.antiAlias,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context)
-                      .pushNamed('/article', arguments: article.id);
+                  TitledNavigator.of(context).pushNamed('/article',
+                      arguments: article.id, newTitle: article.title);
                 },
                 child: Column(
                   children: <Widget>[
-                    ColorFiltered(
-                      colorFilter: false
-                          ? ColorFilter.mode(
-                              Colors.grey,
-                              BlendMode.saturation,
-                            )
-                          : ColorFilter.mode(
-                              Colors.transparent,
-                              BlendMode.multiply,
-                            ),
-                      child: Image.network(
-                        article.imageUrl,
-                        fit: BoxFit.fitWidth,
-                      ),
+                    Image.network(
+                      article.imageUrl,
+                      fit: BoxFit.fitWidth,
                     ),
                     Padding(
                         padding: EdgeInsets.all(16),

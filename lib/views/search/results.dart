@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:law_app/models/news/article.dart';
-import 'package:law_app/views/news/news.dart';
+import 'package:law_app/views/search/search.dart';
+
+import '../titled_navigator.dart';
 
 class FrostTransition extends AnimatedWidget {
   final Widget child;
@@ -21,9 +22,12 @@ class FrostTransition extends AnimatedWidget {
 }
 
 class ResultsView<R> extends PopupRoute<Null> {
+
   final Widget Function(BuildContext, R) buildResult;
 
-  ResultsView({@required this.buildResult});
+  ResultsView({
+    @required this.buildResult
+  });
 
   @override
   Color get barrierColor => null;
@@ -61,27 +65,12 @@ class ResultsView<R> extends PopupRoute<Null> {
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation) =>
-      ListView(
-        children: [
-          for (var result in List<NewsArticleSearchResult>.generate(
-              2, (id) => generateArticle(id)))
-            Card(
-              child: InkWell(
-                onTap: () {
-                  context
-                      .findAncestorStateOfType<NewsViewState>()
-                      .cancelSearch();
-                  Navigator.of(context)
-                      .pushNamed('/article', arguments: result.id);
-                },
-                child: ListTile(
-                    title: Text(
-                  result.title,
-                  style: Theme.of(context).textTheme.headline5,
-                )),
-              ),
-            )
-        ],
-      );
+          Animation<double> secondaryAnimation) {
+    return ListView(
+      children: [
+        for (var result in SearchFrame.of(context).results)
+          buildResult(context, result)
+      ],
+    );
+  }
 }

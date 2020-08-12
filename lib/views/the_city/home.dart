@@ -36,7 +36,7 @@ class TheCitySection<I> {
           child: ListView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.symmetric(horizontal: 16),
-              children: [for (Object item in items) buildItem(context, item)]),
+              children: [for (var item in items) buildItem(context, item)]),
         )
       ];
 }
