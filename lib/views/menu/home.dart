@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:law_app/views/titled_navigator.dart';
 
 class MenuHomeView extends StatelessWidget {
 
   static final List<MenuItem> _items = [
-    MenuItem(name: 'Profile', icon: Icons.person),
     MenuItem(name: 'Settings', icon: Icons.settings),
     MenuItem(name: 'About', icon: Icons.info),
   ];

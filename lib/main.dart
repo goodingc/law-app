@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/comms.dart';
@@ -22,14 +23,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.fromSwatch(primarySwatch: Colors.amber);
+    final colorScheme = ColorScheme.fromSwatch(primarySwatch: Colors.lightBlue);
     return MaterialApp(
         title: _title,
         home: MainNavigator(),
         theme: Theme.of(context).copyWith(
             colorScheme: colorScheme,
           primaryColor: colorScheme.primary,
-          accentColor: colorScheme.primaryVariant
+          accentColor: colorScheme.secondary,
         ));
   }
 }
@@ -57,9 +58,14 @@ class _MainNavigatorState extends State<MainNavigator> {
     initialPage: 0,
   );
 
+
+
+
   static final List<MainNavLocation> _navLocations = [
-    MainNavLocation('News', Icons.description, view: NewsView()),
-    MainNavLocation('The City', Icons.business, view: TheCityView()),
+    MainNavLocation('News', FaIcon(FontAwesomeIcons.newspaper).icon, view: NewsView()),
+    MainNavLocation('The City', FaIcon(FontAwesomeIcons.city).icon, view: TheCityView()),
+    MainNavLocation('Profile', FaIcon(FontAwesomeIcons.userTie).icon),
+    MainNavLocation('Applications', FaIcon(FontAwesomeIcons.fileAlt).icon),
     MainNavLocation('Menu', Icons.menu, view: MenuView())
   ];
 

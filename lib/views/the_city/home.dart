@@ -41,21 +41,49 @@ class TheCitySection<I> {
       ];
 }
 
+extension LawFirmCircleColor on LawFirmCircle {
+  Color get color {
+    switch (this) {
+      case LawFirmCircle.gold:
+        return Colors.amber;
+      case LawFirmCircle.silver:
+        return Colors.grey;
+      case LawFirmCircle.blue:
+        return Colors.blue;
+    }
+  }
+}
+
 final _theCitySections = <TheCitySection<dynamic>>[
   TheCitySection<LawFirm>(
       title: 'Firms',
       items: lawFirms,
-      buildItem: (_, firm) => Padding(
-          padding: const EdgeInsets.all(4),
+      buildItem: (context, firm) => Padding(
+          padding: const EdgeInsets.all(8),
           child: Container(
-            width: 80,
+            width: 84,
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(firm.logoUrl),
-                    radius: 40,
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: Container(
+                    child: CircleAvatar(
+                      radius: 42,
+                      backgroundColor: firm.circle?.color ?? Colors.transparent,
+                      child:  CircleAvatar(
+                        backgroundImage: NetworkImage(firm.logoUrl),
+                        radius: 40,
+                      ),
+                    ),
+                    decoration: firm.circle != null ?  BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: [
+                          BoxShadow(
+                            color: firm.circle.color,
+                            blurRadius: 6.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]): null,
                   ),
                 ),
                 Text(
@@ -65,7 +93,7 @@ final _theCitySections = <TheCitySection<dynamic>>[
               ],
             ),
           )),
-      itemHeight: 140),
+      itemHeight: 150),
   TheCitySection<LegalTerm>(
       title: 'Terminology',
       items: legalTerms,

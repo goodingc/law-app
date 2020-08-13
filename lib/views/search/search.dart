@@ -79,6 +79,7 @@ class SearchFrameState<R> extends State<SearchFrame<R>> {
                       ),
                       Expanded(
                         child: TextField(
+                          keyboardAppearance: Brightness.light,
                           focusNode: _textFocusNode,
                           controller: _textController,
                         ),
